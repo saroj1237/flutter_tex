@@ -1,17 +1,20 @@
 // ignore_for_file: avoid_web_libraries_in_flutter
 
-import 'dart:html' as html;
-import 'dart:js' as js;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_tex/flutter_tex.dart';
 import 'package:flutter_tex/src/utils/core_utils.dart';
+import 'dart:html' as html;
+import 'dart:js' as js;
 import 'dart:ui_web' as ui;
 
 class TeXViewState extends State<TeXView> {
   String? _lastData;
-  double widgetHeight = minHeight;
+  double widgetHeight = defaultHeight;
   final String _viewId = UniqueKey().toString();
+
+  final TeXViewRenderingEngine renderingEngine =
+      TeXRederingServer.renderingEngine;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +39,7 @@ class TeXViewState extends State<TeXView> {
         _viewId,
         (int id) => html.IFrameElement()
           ..src =
-              "assets/packages/flutter_tex/js/${widget.renderingEngine?.name ?? "katex"}/index.html"
+              "assets/packages/flutter_tex/js/${renderingEngine.name}/index.html"
           ..id = _viewId
           ..style.height = '100%'
           ..style.width = '100%'
@@ -57,13 +60,12 @@ class TeXViewState extends State<TeXView> {
   }
 
   void _initTeXView() {
-    if (getRawData(widget) != _lastData) {
-      js.context.callMethod('initWebTeXView', [
-        _viewId,
-        getRawData(widget),
-        widget.renderingEngine?.name ?? "katex"
-      ]);
-      _lastData = getRawData(widget);
+    var rawData = getRawData(widget);
+
+    if (rawData != _lastData) {
+      js.context.callMethod(
+          'initWebTeXView', [_viewId, rawData, renderingEngine.name]);
+      _lastData = rawData;
     }
   }
 }

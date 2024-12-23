@@ -2,7 +2,7 @@ name: flutter_tex_example
 description: A Flutter Package (Demo) to render LaTeX with full HTML and JavaScript support.
 homepage: https://github.com/shahxadakram/flutter_tex
 
-version: 3.6.7
+version: 3.6.7+12
 
 publish_to: "none"
 
@@ -26,11 +26,11 @@ flutter:
   uses-material-design: true
   assets:
     - assets/flutter_tex_banner.png
-    - assets/fonts/Army.ttf
-    - assets/fonts/Budhrg.ttf
-    - assets/fonts/CELTG.ttf
-    - assets/fonts/hillock.ttf
-    - assets/fonts/intimacy.ttf
-    - assets/fonts/SansationLight.ttf
-    - assets/fonts/slenmini.ttf
-    - assets/fonts/SubaccuzRegular.ttf
+    - fonts/Army.ttf
+    - fonts/Budhrg.ttf
+    - fonts/CELTG.ttf
+    - fonts/hillock.ttf
+    - fonts/intimacy.ttf
+    - fonts/SansationLight.ttf
+    - fonts/slenmini.ttf
+    - fonts/SubaccuzRegular.ttf

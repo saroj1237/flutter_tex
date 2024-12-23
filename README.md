@@ -35,7 +35,6 @@
 - [Web Demo.](#web-demo)
 - [Api Changes.](#api-changes)
 - [Api Usage.](#api-usage)
-- [To Do:](#to-do)
 - [Cautions:](#cautions)
 
 # About
@@ -76,7 +75,7 @@ Basically it's a flutter dart wrapper around the most powerful JavaScript librar
 
 ```yaml
 dependencies:
-  flutter_tex: ^4.0.9
+  flutter_tex: ^4.0.10
 ``` 
 
 **2:** You can install packages from the command line:
@@ -143,7 +142,22 @@ For Web support you need to put `<script src="assets/packages/flutter_tex/js/flu
 import 'package:flutter_tex/flutter_tex.dart'; 
 ```
 
-**5:** Now you can use TeXView as a widget:
+**5:** Make sure to setup `TeXRederingServer` before rendering TeX:
+
+```dart
+main() async {
+  TeXRederingServer.renderingEngine = const TeXViewRenderingEngine.katex();
+
+  if (!kIsWeb) {
+    await TeXRederingServer.run();
+    await TeXRederingServer.initController();
+  }
+
+  runApp(...);
+}
+```
+
+**6:** Now you can use TeXView as a widget:
 
 # Examples
 
@@ -244,10 +258,6 @@ You can find web demo at [https://flutter-tex.web.app](https://flutter-tex.web.a
 - `onTeXViewCreated:` Callback when TeXView loading finishes.
 
 For more please see the [Example](https://github.com/Shahxad-Akram/flutter_tex/tree/master/example).
-
-# To Do:
-- ~~Speed Optimizations as it's a bit slow rendering speed. It takes 1-2 seconds to render after application loaded.~~ (Solved by adding Katex Support)
-- `Bug in Web Support` on `setState` everything disappears.
 
 # Cautions:
 - Please avoid using too many `TeXView` in a single page, because this is based on [webview_flutter_plus](https://pub.dartlang.org/packages/webview_flutter_plus) a complete web browser. Which may cause slowing down your app. I am trying to add all necessary widgets within `TeXView`, So please prefer to use `TeXViewWidget`. You can check [example folder](https://github.com/Shahxad-Akram/flutter_tex/tree/master/example) for details. If you find any problem you can [report an issue](https://github.com/Shahxad-Akram/flutter_tex/issues/new).

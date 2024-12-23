@@ -101,10 +101,7 @@ class TeXExample {
 }
 
 class TeXViewDocumentExamples extends StatelessWidget {
-  final TeXViewRenderingEngine renderingEngine;
-
-  const TeXViewDocumentExamples(
-      {super.key, this.renderingEngine = const TeXViewRenderingEngine.katex()});
+  const TeXViewDocumentExamples({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +111,6 @@ class TeXViewDocumentExamples extends StatelessWidget {
         title: const Text("TeXViewDocument"),
       ),
       body: TeXView(
-        renderingEngine: renderingEngine,
         child: TeXViewColumn(children: [
           TeXExample.introduction,
           TeXExample.mathML,
@@ -125,11 +121,13 @@ class TeXViewDocumentExamples extends StatelessWidget {
           TeXExample.chemistryEquations,
           TeXExample.matrix,
           TeXViewDetails(
-            title: "sdfsdfsdsd",
+            title: "Collapsible Widget",
             style: const TeXViewStyle(backgroundColor: Colors.amber),
             body: TeXExample.matrix,
           ),
-          if (renderingEngine.name == 'mathjax') ...[TeXExample.others]
+          if (TeXRederingServer.renderingEngine.name == 'mathjax') ...[
+            TeXExample.others
+          ]
         ]),
         style: const TeXViewStyle(
           margin: TeXViewMargin.all(10),

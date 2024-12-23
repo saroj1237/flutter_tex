@@ -172,10 +172,9 @@ For more please see the [Example](https://github.com/Shahxad-Akram/flutter_tex/t
 """;
 
 class TeXViewMarkdownExamples extends StatelessWidget {
-  final TeXViewRenderingEngine renderingEngine;
 
   const TeXViewMarkdownExamples(
-      {super.key, this.renderingEngine = const TeXViewRenderingEngine.katex()});
+      {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -185,7 +184,6 @@ class TeXViewMarkdownExamples extends StatelessWidget {
         title: const Text("TeXViewMarkdown"),
       ),
       body: TeXView(
-        renderingEngine: renderingEngine,
         child: TeXViewMarkdown(_markdownFlutterTeX),
         style: const TeXViewStyle(
           margin: TeXViewMargin.all(10),

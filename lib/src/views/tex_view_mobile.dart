@@ -1,63 +1,39 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tex/flutter_tex.dart';
 import 'package:flutter_tex/src/utils/core_utils.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 
-class TeXViewState extends State<TeXView> with AutomaticKeepAliveClientMixin {
-  late WebViewControllerPlus _controller;
+class TeXViewState extends State<TeXView> {
+  final WebViewControllerPlus _controller = TeXRederingServer.controller;
 
-  double _height = minHeight;
-  String? _lastData;
-  bool _pageLoaded = false;
-
-  @override
-  bool get wantKeepAlive => true;
+  double _height = defaultHeight;
+  String _lastData = "";
 
   @override
   void initState() {
-    _controller = WebViewControllerPlus()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(Color(Colors.transparent.value))
-      ..loadFlutterAssetServer(
-          "packages/flutter_tex/js/${widget.renderingEngine?.name ?? 'katex'}/index.html")
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onPageFinished: (String url) {
-            _pageLoaded = true;
-            _initTeXView();
-          },
-        ),
-      )
-      ..setOnConsoleMessage((message) {
-        if (kDebugMode) {
-          print(message);
-        }
-      })
-      ..addJavaScriptChannel('OnTapCallback', onMessageReceived: (jm) {
-        widget.child.onTapCallback(jm.message);
-      })
-      ..addJavaScriptChannel('TeXViewRenderedCallback',
-          onMessageReceived: (jm) async {
-        double height = double.parse(jm.message);
-        if (_height != height) {
-          setState(() {
-            _height = height;
-          });
-        }
-        widget.onRenderFinished?.call(height);
-      });
+    TeXRederingServer.onTeXViewRenderedCallback =
+        (teXViewRenderedCallbackMessage) async {
+      double newHeight = double.parse(teXViewRenderedCallbackMessage);
+      if (_height != newHeight) {
+        setState(() {
+          _height = newHeight;
+        });
+      }
+      widget.onRenderFinished?.call(_height);
+    };
+
+    TeXRederingServer.onTapCallback = (tapCallbackMessage) {
+      widget.child.onTapCallback(tapCallbackMessage);
+    };
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-    updateKeepAlive();
-    _initTeXView();
+    _renderTeXView();
     return IndexedStack(
       index: widget.loadingWidgetBuilder?.call(context) != null
-          ? _height == minHeight
+          ? _height == defaultHeight
               ? 1
               : 0
           : 0,
@@ -73,18 +49,12 @@ class TeXViewState extends State<TeXView> with AutomaticKeepAliveClientMixin {
     );
   }
 
-  @override
-  void dispose() {
-    _controller.server.close();
-    super.dispose();
-  }
-
-  void _initTeXView() {
-    if (_pageLoaded && getRawData(widget) != _lastData) {
-      if (widget.loadingWidgetBuilder != null) _height = minHeight;
-      _controller
-          .runJavaScriptReturningResult("initView(${getRawData(widget)})");
-      _lastData = getRawData(widget);
+  void _renderTeXView() {
+    var rawData = getRawData(widget);
+    if (rawData != _lastData) {
+      if (widget.loadingWidgetBuilder != null) _height = defaultHeight;
+      _controller.runJavaScriptReturningResult("initView($rawData)");
+      _lastData = rawData;
     }
   }
 }

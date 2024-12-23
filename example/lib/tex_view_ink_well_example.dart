@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tex/flutter_tex.dart';
 
 class TeXViewInkWellExample extends StatefulWidget {
-  final TeXViewRenderingEngine renderingEngine;
 
   const TeXViewInkWellExample(
-      {super.key, this.renderingEngine = const TeXViewRenderingEngine.katex()});
+      {super.key});
 
   @override
   State<TeXViewInkWellExample> createState() => _TeXViewInkWellExampleState();
@@ -33,7 +32,6 @@ class _TeXViewInkWellExampleState extends State<TeXViewInkWellExample> {
         title: Text("TeXViewInkWell: You tapped: $tappedId"),
       ),
       body: TeXView(
-          renderingEngine: widget.renderingEngine,
           child: TeXViewColumn(children: [
             TeXViewInkWell(
                 child: const TeXViewDocument(

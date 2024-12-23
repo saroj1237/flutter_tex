@@ -20,10 +20,7 @@ class QuizOption {
 }
 
 class TeXViewQuizExample extends StatefulWidget {
-  final TeXViewRenderingEngine renderingEngine;
-
-  const TeXViewQuizExample(
-      {super.key, this.renderingEngine = const TeXViewRenderingEngine.katex()});
+  const TeXViewQuizExample({super.key});
 
   @override
   State<TeXViewQuizExample> createState() => _TeXViewQuizExampleState();
@@ -120,7 +117,6 @@ class _TeXViewQuizExampleState extends State<TeXViewQuizExample> {
             textAlign: TextAlign.center,
           ),
           TeXView(
-            renderingEngine: widget.renderingEngine,
             child: TeXViewColumn(children: [
               TeXViewDocument(quizList[currentQuizIndex].statement,
                   style:
@@ -162,11 +158,11 @@ class _TeXViewQuizExampleState extends State<TeXViewQuizExample> {
               ),
               backgroundColor: Colors.white,
             ),
-            loadingWidgetBuilder: (context) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            },
+            // loadingWidgetBuilder: (context) {
+            //   return const Center(
+            //     child: CircularProgressIndicator(),
+            //   );
+            // },
           ),
           if (isWrong)
             const Padding(

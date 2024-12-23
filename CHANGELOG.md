@@ -1,3 +1,7 @@
+## [4.0.10] - Dec 23, 2024
+* API changes, please refer to [TeXView Example](https://github.com/Shahxad-Akram/flutter_tex/blob/master/example/lib)
+* Performance optimizations.
+
 ## [4.0.9]- August 18, 2024
 * Minor Fixes.
 
