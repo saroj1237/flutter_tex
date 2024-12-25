@@ -21,7 +21,7 @@ class TeXRederingServer {
   }
 
   static Future<void> initController() async {
-    var completer = Completer<void>();
+    var controllerCompleter = Completer<void>();
 
     controller
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -33,7 +33,7 @@ class TeXRederingServer {
         NavigationDelegate(
           onPageFinished: (String url) {
             onPageFinished?.call(url);
-            completer.complete();
+            controllerCompleter.complete();
           },
         ),
       )
@@ -52,13 +52,13 @@ class TeXRederingServer {
       )
       ..addJavaScriptChannel(
         'TeXViewRenderedCallback',
-        onMessageReceived: (teXViewRenderedCallbackMessage) async {
+        onMessageReceived: (teXViewRenderedCallbackMessage) {
           onTeXViewRenderedCallback
               ?.call(teXViewRenderedCallbackMessage.message);
         },
       );
 
-    return completer.future;
+    return controllerCompleter.future;
   }
 
   static Future<void> stop() async {

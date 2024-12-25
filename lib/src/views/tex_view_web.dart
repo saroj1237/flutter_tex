@@ -10,7 +10,7 @@ import 'dart:ui_web' as ui;
 
 class TeXViewState extends State<TeXView> {
   String? _lastData;
-  double widgetHeight = defaultHeight;
+  double widgetHeight = initialHeight;
   final String _viewId = UniqueKey().toString();
 
   final TeXViewRenderingEngine renderingEngine =

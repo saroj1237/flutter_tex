@@ -6,25 +6,26 @@ import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 class TeXViewState extends State<TeXView> {
   final WebViewControllerPlus _controller = TeXRederingServer.controller;
 
-  double _height = defaultHeight;
-  String _lastData = "";
+  double _currentHeight = initialHeight;
+  String _lastRawData = "";
 
   @override
   void initState() {
     TeXRederingServer.onTeXViewRenderedCallback =
         (teXViewRenderedCallbackMessage) async {
       double newHeight = double.parse(teXViewRenderedCallbackMessage);
-      if (_height != newHeight) {
+      if (_currentHeight != newHeight) {
         setState(() {
-          _height = newHeight;
+          _currentHeight = newHeight;
         });
       }
-      widget.onRenderFinished?.call(_height);
+      widget.onRenderFinished?.call(_currentHeight);
     };
 
     TeXRederingServer.onTapCallback = (tapCallbackMessage) {
       widget.child.onTapCallback(tapCallbackMessage);
     };
+
     super.initState();
   }
 
@@ -33,13 +34,13 @@ class TeXViewState extends State<TeXView> {
     _renderTeXView();
     return IndexedStack(
       index: widget.loadingWidgetBuilder?.call(context) != null
-          ? _height == defaultHeight
+          ? _currentHeight == initialHeight
               ? 1
               : 0
           : 0,
       children: <Widget>[
         SizedBox(
-          height: _height,
+          height: _currentHeight,
           child: WebViewWidget(
             controller: _controller,
           ),
@@ -49,12 +50,13 @@ class TeXViewState extends State<TeXView> {
     );
   }
 
-  void _renderTeXView() {
-    var rawData = getRawData(widget);
-    if (rawData != _lastData) {
-      if (widget.loadingWidgetBuilder != null) _height = defaultHeight;
-      _controller.runJavaScriptReturningResult("initView($rawData)");
-      _lastData = rawData;
+  void _renderTeXView() async {
+    var currentRawData = getRawData(widget);
+    if (currentRawData != _lastRawData) {
+      if (widget.loadingWidgetBuilder != null) _currentHeight = initialHeight;
+      await _controller
+          .runJavaScriptReturningResult("initView($currentRawData)");
+      _lastRawData = currentRawData;
     }
   }
 }
