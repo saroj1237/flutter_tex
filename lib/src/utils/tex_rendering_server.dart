@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,17 +6,17 @@ import 'package:flutter_tex/src/models/rendering_engine.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 
 class TeXRederingServer {
-  static HttpServer? server;
   static RenderingEngineCallback? onPageFinished,
       onTapCallback,
       onTeXViewRenderedCallback;
   static WebViewControllerPlus controller = WebViewControllerPlus();
   static TeXViewRenderingEngine renderingEngine =
-      const TeXViewRenderingEngine.katex();
+      const TeXViewRenderingEngine.mathjax();
+
+  static LocalhostServer localhostServer = LocalhostServer();
 
   static Future<void> run({int port = 0}) async {
-    await LocalHostServer.start(port: port);
-    server = LocalHostServer.server;
+    await localhostServer.start(port: port);
   }
 
   static Future<void> initController() async {
@@ -28,7 +27,7 @@ class TeXRederingServer {
       ..setBackgroundColor(Colors.transparent)
       ..loadFlutterAssetWithServer(
           "packages/flutter_tex/js/${renderingEngine.name}/index.html",
-          server!.port)
+          localhostServer.port!)
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageFinished: (String url) {
@@ -40,7 +39,7 @@ class TeXRederingServer {
       ..setOnConsoleMessage(
         (message) {
           if (kDebugMode) {
-            print(message);
+            print(message.message);
           }
         },
       )
@@ -62,7 +61,7 @@ class TeXRederingServer {
   }
 
   static Future<void> stop() async {
-    await LocalHostServer.close();
+    await localhostServer.close();
   }
 }
 

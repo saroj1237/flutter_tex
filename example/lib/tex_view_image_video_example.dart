@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_tex/flutter_tex.dart';
 
 class TeXViewImageVideoExample extends StatelessWidget {
-
-  const TeXViewImageVideoExample(
-      {super.key});
+  const TeXViewImageVideoExample({super.key});
 
   @override
   Widget build(BuildContext context) {

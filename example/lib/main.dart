@@ -9,7 +9,7 @@ import 'package:flutter_tex_example/tex_view_markdown_example.dart';
 import 'package:flutter_tex_example/tex_view_quiz_example.dart';
 
 main() async {
-  TeXRederingServer.renderingEngine = const TeXViewRenderingEngine.katex();
+  TeXRederingServer.renderingEngine = const TeXViewRenderingEngine.mathjax();
 
   if (!kIsWeb) {
     await TeXRederingServer.run();
@@ -67,7 +67,7 @@ class _TeXViewFullExampleState extends State<TeXViewFullExample> {
                 groupValue: radVal,
                 onChanged: (val) async {
                   TeXRederingServer.renderingEngine =
-                      const TeXViewRenderingEngine.katex();
+                      const TeXViewRenderingEngine.mathjax();
 
                   if (!kIsWeb) {
                     await TeXRederingServer.initController();
@@ -77,7 +77,7 @@ class _TeXViewFullExampleState extends State<TeXViewFullExample> {
                     radVal = val!;
                   });
                 },
-                title: const Text("Katex"),
+                title: const Text("MathJax"),
                 subtitle: const Text("RenderingEngine for Fast Rendering"),
               ),
               RadioListTile<int>(
@@ -85,7 +85,7 @@ class _TeXViewFullExampleState extends State<TeXViewFullExample> {
                 groupValue: radVal,
                 onChanged: (val) async {
                   TeXRederingServer.renderingEngine =
-                      const TeXViewRenderingEngine.mathjax();
+                      const TeXViewRenderingEngine.katex();
                   if (!kIsWeb) {
                     await TeXRederingServer.initController();
                   }
@@ -93,7 +93,7 @@ class _TeXViewFullExampleState extends State<TeXViewFullExample> {
                     radVal = val!;
                   });
                 },
-                title: const Text("MathJax"),
+                title: const Text("Katex"),
                 subtitle: const Text("RenderingEngine for Quality Rendering"),
               ),
             ],
