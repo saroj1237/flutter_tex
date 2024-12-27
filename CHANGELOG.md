@@ -1,3 +1,6 @@
+## [4.0.12] - Dec 27, 2024
+* Fixed color alpha value calculation in getColor function [#200](https://github.com/Shahxad-Akram/flutter_tex/pull/200
+
 ## [4.0.11] - Dec 27, 2024
 * API changes, please refer to [TeXView Example](https://github.com/Shahxad-Akram/flutter_tex/blob/master/example/lib)
 
